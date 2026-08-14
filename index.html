@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stackly Events — Corporate Event Booking, Engineered Like a Production</title>
+<meta name="description" content="Book keynote stages, galas, product launches and offsites with Stackly Events — end-to-end corporate event planning and venue booking.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root{
+  /* ---- Palette ---- */
+  --void:        #080a17;
+  --void-soft:    #0c0f22;
+  --panel:        #12162c;
+  --panel-light:  #1b2144;
+  --panel-border: #262d54;
+  --spotlight:    #ffb443;
+  --spotlight-dim:#a87a2e;
+  --violet:       #8b7fff;
+  --violet-dim:   #4f47a3;
+  --porcelain:    #f6f3ec;
+  --mist:         #9aa1c7;
+  --mist-dim:     #666d94;
+  --emerald:      #4ade9c;
+  --coral:        #ff6b6b;
+
+  /* ---- Type ---- */
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Manrope', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ---- Scale ---- */
+  --container: 1280px;
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 26px;
+  --nav-h: 84px;
+
+  --ease-stage: cubic-bezier(.16,.84,.44,1);
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+html,body{ padding:0; margin:0; }
+body{
+  background:var(--void);
+  color:var(--porcelain);
+  font-family:var(--font-body);
+  font-size:16px;
+  line-height:1.6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; margin:0; padding:0; }
+button{ font-family:inherit; cursor:pointer; }
+input,textarea,select{ font-family:inherit; }
+::selection{ background:var(--spotlight); color:var(--void); }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important; }
+}
+
+h1,h2,h3,h4{ font-family:var(--font-display); font-weight:500; margin:0; line-height:1.08; letter-spacing:-.01em; }
+p{ margin:0; }
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:.72rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--spotlight);
+  display:inline-flex;
+  align-items:center;
+  gap:.6em;
+}
+.eyebrow::before{ content:''; width:22px; height:1px; background:var(--spotlight); display:inline-block; }
+
+.container{ max-width:var(--container); margin:0 auto; padding:0 40px; }
+.section{ padding:90px 0; position:relative; }
+.section-tight{ padding:50px 0; }
+.section-head{ max-width:640px; margin-bottom:64px; }
+.section-head p{ color:var(--mist); font-size:1.05rem; margin-top:18px; }
+
+.text-center{ text-align:center; margin-left:auto; margin-right:auto; }
+
+/* ---- Buttons ---- */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.6em;
+  padding:16px 32px; border-radius:100px; font-weight:600; font-size:.92rem;
+  border:1px solid transparent; transition:transform .4s var(--ease-stage), background .3s, border-color .3s, color .3s;
+  white-space:nowrap;
+}
+.btn-primary{ background:var(--spotlight); color:var(--void); }
+.btn-primary:hover{ transform:translateY(-3px); background:#ffc466; }
+.btn-ghost{ border-color:var(--panel-border); color:var(--porcelain); }
+.btn-ghost:hover{ border-color:var(--spotlight); color:var(--spotlight); transform:translateY(-3px); }
+.btn-block{ width:100%; }
+.btn-sm{ padding:11px 22px; font-size:.82rem; }
+
+/* ==========================================================================
+   NAVIGATION
+   ========================================================================== */
+.site-nav{
+  position:fixed; top:0; left:0; right:0; z-index:1000;
+  height:var(--nav-h); display:flex; align-items:center;
+  background:rgba(8,10,23,0); border-bottom:1px solid transparent;
+  transition:background .4s, border-color .4s, height .4s;
+}
+.site-nav.is-scrolled{
+  background:rgba(8,10,23,.86); backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--panel-border); height:72px;
+}
+.nav-inner{
+  width:100%; max-width:var(--container); margin:0 auto; padding:0 40px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.logo img{ height:70px; width:auto; }
+.nav-links{ display:flex; align-items:center; gap:40px; }
+.nav-links a{
+  font-size:.92rem; font-weight:600; color:var(--mist); position:relative; padding:6px 0;
+  transition:color .3s;
+}
+.nav-links a::after{
+  content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--spotlight);
+  transition:width .35s var(--ease-stage);
+}
+.nav-links a:hover, .nav-links a.active{ color:var(--porcelain); }
+.nav-links a.active::after, .nav-links a:hover::after{ width:100%; }
+.nav-cta{ display:flex; align-items:center; gap:18px; }
+.nav-icon-link{
+  width:42px; height:42px; border-radius:50%; border:1px solid var(--panel-border);
+  display:flex; align-items:center; justify-content:center; transition:border-color .3s, color .3s;
+}
+.nav-icon-link:hover{ border-color:var(--spotlight); color:var(--spotlight); }
+.nav-toggle{
+  display:none; flex-direction:column; justify-content:center; gap:5px;
+  width:44px; height:44px; background:none; border:none; z-index:1100;
+}
+.nav-toggle span{ display:block; width:24px; height:2px; background:var(--porcelain); transition:transform .35s var(--ease-stage), opacity .3s; }
+.nav-toggle.is-open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.nav-toggle.is-open span:nth-child(2){ opacity:0; }
+.nav-toggle.is-open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+.mobile-menu{
+  position:fixed; inset:0; background:var(--void-soft); z-index:1050;
+  display:flex; flex-direction:column; align-items:flex-start; justify-content:center;
+  padding:0 40px; transform:translateY(-100%); pointer-events:none;
+}
+.mobile-menu a{
+  font-family:var(--font-display); font-size:2.4rem; font-weight:500; color:var(--porcelain);
+  padding:12px 0; opacity:0;
+}
+.mobile-menu .btn{ margin-top:20px; opacity:0; }
+.mobile-close{
+  position:absolute; top:24px; right:24px; width:44px; height:44px; border-radius:50%;
+  border:1px solid var(--panel-border); background:none; color:var(--porcelain);
+  display:flex; align-items:center; justify-content:center; z-index:1101;
+  transition:border-color .3s, color .3s, transform .4s var(--ease-stage);
+}
+.mobile-close:hover{ border-color:var(--spotlight); color:var(--spotlight); transform:rotate(90deg); }
+
+/* ==========================================================================
+   AMBIENT / STAGE BACKGROUND ELEMENTS
+   ========================================================================== */
+.stage-field{ position:absolute; inset:0; overflow:hidden; z-index:0; pointer-events:none; }
+.blob{
+  position:absolute; border-radius:50%; filter:blur(90px); opacity:.55;
+  will-change:transform;
+}
+.blob-amber{ background:radial-gradient(circle, var(--spotlight), transparent 70%); width:640px; height:640px; }
+.blob-violet{ background:radial-gradient(circle, var(--violet), transparent 70%); width:560px; height:560px; }
+.grain::after{
+  content:''; position:absolute; inset:0; pointer-events:none; opacity:.05; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.spotlight-cursor{
+  position:fixed; top:0; left:0; width:520px; height:520px; border-radius:50%;
+  background:radial-gradient(circle, rgba(255,180,67,.10), transparent 70%);
+  transform:translate(-50%,-50%); pointer-events:none; z-index:1; mix-blend-mode:screen;
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+.hero{
+  position:relative; min-height:100vh; display:flex; flex-direction:column; justify-content:center;
+  padding-top:var(--nav-h); overflow:hidden; background:var(--void);
+}
+.hero-media{ position:absolute; inset:0; z-index:0; }
+.hero-media img{ width:100%; height:100%; object-fit:cover; opacity:.3; }
+.hero-media::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(8,10,23,.4) 0%, var(--void) 95%); }
+.hero-inner{ position:relative; z-index:2; max-width:var(--container); margin:0 auto; padding:60px 40px 0; width:100%; }
+.hero h1{
+  font-size:clamp(3rem, 7.4vw, 6.6rem); color:var(--porcelain); max-width:16ch;
+}
+.hero h1 .word{ display:inline-block; overflow:hidden; padding-bottom:.08em; margin-bottom:-.08em; }
+.hero h1 .char{ display:inline-block; will-change:transform; }
+.hero h1 em{ font-style:italic; color:var(--spotlight); }
+.hero-sub{ max-width:520px; margin-top:32px; font-size:1.15rem; color:var(--mist); }
+.hero-actions{ display:flex; align-items:center; gap:26px; margin-top:46px; flex-wrap:wrap; }
+.hero-note{ font-family:var(--font-mono); font-size:.78rem; color:var(--mist-dim); display:flex; align-items:center; gap:10px; }
+.pulse-dot{ width:8px; height:8px; border-radius:50%; background:var(--emerald); position:relative; }
+.pulse-dot::after{
+  content:''; position:absolute; inset:-6px; border-radius:50%; border:1px solid var(--emerald);
+  animation:pulseRing 2s ease-out infinite;
+}
+@keyframes pulseRing{ 0%{ transform:scale(.4); opacity:1;} 100%{ transform:scale(1.8); opacity:0;} }
+
+/* ---- Ticker / marquee (signature element) ---- */
+.ticker{
+  position:relative; z-index:2; border-top:1px solid var(--panel-border); border-bottom:1px solid var(--panel-border);
+  margin-top:90px; overflow:hidden; background:var(--void-soft);
+}
+.ticker-track{ display:flex; width:max-content; }
+.ticker-track span{
+  font-family:var(--font-mono); font-size:.85rem; letter-spacing:.05em; color:var(--mist);
+  padding:20px 34px; white-space:nowrap; border-right:1px solid var(--panel-border);
+}
+.ticker-track span b{ color:var(--spotlight); font-weight:600; }
+.ticker-track.reverse{ animation-direction:reverse; }
+
+/* ==========================================================================
+   STAT COUNTERS
+   ========================================================================== */
+.stat-row{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:40px; position:relative; z-index:2;
+}
+.stat b{
+  font-family:var(--font-display); font-size:3rem; color:var(--porcelain); display:flex; align-items:baseline; gap:4px;
+}
+.stat b .unit{ font-size:1.4rem; color:var(--spotlight); }
+.stat span{ font-family:var(--font-mono); font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mist-dim); margin-top:8px; display:block; }
+
+/* ==========================================================================
+   CARDS
+   ========================================================================== */
+.grid-3{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+.grid-2{ display:grid; grid-template-columns:repeat(2,1fr); gap:28px; }
+.grid-4{ display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+
+.card{
+  background:var(--panel); border:1px solid var(--panel-border); border-radius:var(--radius-lg);
+  padding:38px; position:relative; overflow:hidden; transition:transform .5s var(--ease-stage), border-color .4s;
+}
+.card:hover{ transform:translateY(-8px); border-color:var(--spotlight-dim); }
+.card .num{ font-family:var(--font-mono); color:var(--spotlight); font-size:.82rem; letter-spacing:.08em; }
+.card h3{ font-size:1.5rem; color:var(--porcelain); margin-top:18px; }
+.card p{ color:var(--mist); margin-top:14px; font-size:.96rem; }
+.card-icon{
+  width:52px; height:52px; border-radius:14px; background:var(--panel-light);
+  display:flex; align-items:center; justify-content:center; color:var(--spotlight); margin-bottom:8px;
+}
+
+.media-card{ border-radius:var(--radius-lg); overflow:hidden; position:relative; }
+.media-card .frame{ overflow:hidden; border-radius:var(--radius-lg); }
+.media-card img{ width:100%; height:100%; object-fit:cover; transition:transform 1s var(--ease-stage); }
+.media-card:hover img{ transform:scale(1.08); }
+.media-card .caption{ padding:22px 4px 0; }
+.media-card .caption h4{ color:var(--porcelain); font-size:1.15rem; }
+.media-card .caption span{ font-family:var(--font-mono); font-size:.75rem; color:var(--mist-dim); }
+
+/* reveal-clip for image entrance */
+.reveal-frame{ overflow:hidden; border-radius:var(--radius-lg); position:relative; }
+.reveal-frame img{ width:100%; height:100%; object-fit:cover; }
+.reveal-veil{ position:absolute; inset:0; background:var(--spotlight); transform-origin:bottom; z-index:2; }
+
+/* ==========================================================================
+   PROCESS / TIMELINE (real scheduling based ordering)
+   ========================================================================== */
+.timeline{ position:relative; }
+.timeline::before{ content:''; position:absolute; left:88px; top:0; bottom:0; width:1px; background:var(--panel-border); }
+.timeline-item{ display:grid; grid-template-columns:88px 1fr; gap:40px; padding:38px 0; position:relative; }
+.timeline-item .time{ font-family:var(--font-mono); color:var(--spotlight); font-size:.95rem; padding-top:4px; }
+.timeline-item .dot{ position:absolute; left:83px; top:42px; width:11px; height:11px; border-radius:50%; background:var(--void); border:2px solid var(--spotlight); }
+.timeline-item h4{ font-size:1.3rem; color:var(--porcelain); }
+.timeline-item p{ color:var(--mist); margin-top:10px; max-width:60ch; }
+
+/* ==========================================================================
+   TESTIMONIALS
+   ========================================================================== */
+.quote-block{
+  border-left:2px solid var(--spotlight); padding-left:34px; max-width:760px;
+}
+.quote-block p{ font-family:var(--font-display); font-style:italic; font-size:1.7rem; color:var(--porcelain); line-height:1.4; }
+.quote-block .who{ margin-top:24px; font-family:var(--font-mono); font-size:.8rem; color:var(--mist); }
+
+/* ==========================================================================
+   FORMS
+   ========================================================================== */
+.field{ margin-bottom:22px; }
+.field label{ display:block; font-family:var(--font-mono); font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mist); margin-bottom:10px; }
+.field input, .field select, .field textarea{
+  width:100%; background:var(--panel); border:1px solid var(--panel-border); border-radius:var(--radius-sm);
+  padding:15px 18px; color:var(--porcelain); font-size:.96rem; transition:border-color .3s, background .3s;
+}
+.field input:focus, .field select:focus, .field textarea:focus{
+  outline:none; border-color:var(--spotlight); background:var(--panel-light);
+}
+.field textarea{ resize:vertical; min-height:130px; }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.check-row{ display:flex; align-items:center; gap:10px; font-size:.86rem; color:var(--mist); }
+
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+.site-footer{ background:var(--void-soft); border-top:1px solid var(--panel-border); padding:90px 0 34px; position:relative; }
+.footer-top{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:50px; padding-bottom:60px; }
+.footer-brand p{ color:var(--mist); margin-top:18px; max-width:34ch; }
+.footer-col h5{ font-family:var(--font-mono); font-size:.75rem; letter-spacing:.1em; text-transform:uppercase; color:var(--spotlight); margin-bottom:20px; }
+.footer-col a, .footer-col li{ display:block; color:var(--mist); font-size:.92rem; padding:7px 0; transition:color .3s; }
+.footer-col a:hover{ color:var(--porcelain); }
+.footer-social{ display:flex; gap:14px; margin-top:20px; }
+.footer-social a{ width:38px; height:38px; border-radius:50%; border:1px solid var(--panel-border); display:flex; align-items:center; justify-content:center; }
+.footer-social a:hover{ border-color:var(--spotlight); color:var(--spotlight); }
+.footer-bottom{ border-top:1px solid var(--panel-border); padding-top:28px; display:flex; justify-content:space-between; font-size:.82rem; color:var(--mist-dim); }
+
+/* ==========================================================================
+   PAGE HEADER (interior pages)
+   ========================================================================== */
+.page-head{ padding:calc(var(--nav-h) + 90px) 0 90px; position:relative; overflow:hidden; }
+.page-head-media{ position:absolute; inset:0; z-index:0; }
+.page-head-media img{ width:100%; height:100%; object-fit:cover; opacity:.32; }
+.page-head-media::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg, rgba(8,10,23,.35) 0%, var(--void) 96%); }
+.page-head .eyebrow{ margin-bottom:22px; }
+.page-head h1{ font-size:clamp(2.6rem, 5.4vw, 4.6rem); max-width:16ch; }
+.page-head p{ margin-top:24px; max-width:560px; color:var(--mist); font-size:1.08rem; }
+
+/* ==========================================================================
+   BLOG
+   ========================================================================== */
+.blog-featured{ display:grid; grid-template-columns:1.1fr .9fr; gap:50px; align-items:center; }
+.blog-featured .frame{ aspect-ratio:4/3; }
+.post-meta{ display:flex; gap:16px; align-items:center; font-family:var(--font-mono); font-size:.75rem; color:var(--mist-dim); margin-bottom:16px; }
+.post-tag{ background:var(--panel-light); color:var(--spotlight); padding:4px 12px; border-radius:100px; }
+.filter-row{ display:flex; gap:12px; margin-bottom:50px; flex-wrap:wrap; }
+.filter-pill{
+  padding:10px 22px; border-radius:100px; border:1px solid var(--panel-border); font-size:.85rem; color:var(--mist);
+  transition:all .3s;
+}
+.filter-pill.active, .filter-pill:hover{ border-color:var(--spotlight); color:var(--spotlight); }
+.blog-card .frame{ aspect-ratio:16/10; margin-bottom:22px; }
+
+/* ==========================================================================
+   PRICING / SERVICE PACKAGES
+   ========================================================================== */
+.pricing-card{ display:flex; flex-direction:column; }
+.pricing-card.is-featured{ border-color:var(--spotlight); background:linear-gradient(160deg, var(--panel-light), var(--panel)); }
+.pricing-card .price{ font-family:var(--font-display); font-size:2.6rem; color:var(--porcelain); margin:18px 0; }
+.pricing-card .price span{ font-family:var(--font-mono); font-size:.9rem; color:var(--mist); }
+.pricing-card ul{ margin:26px 0; flex:1; }
+.pricing-card li{ display:flex; align-items:flex-start; gap:10px; padding:9px 0; font-size:.92rem; color:var(--mist); border-top:1px solid var(--panel-border); }
+.pricing-card li:first-child{ border-top:none; }
+.pricing-card li svg{ flex-shrink:0; margin-top:3px; color:var(--spotlight); }
+
+/* ==========================================================================
+   AUTH PAGES (login / register)
+   ========================================================================== */
+.auth-shell{ min-height:100vh; display:grid; grid-template-columns:1fr 1fr; }
+.auth-visual{ position:relative; overflow:hidden; background:var(--panel); }
+.auth-visual img{ width:100%; height:100%; object-fit:cover; opacity:.5; }
+.auth-visual-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(8,10,23,.2), var(--void) 90%); display:flex; flex-direction:column; justify-content:flex-end; padding:60px; }
+.auth-form-side{ display:flex; align-items:center; justify-content:center; padding:60px 40px; position:relative; }
+.auth-box{ width:100%; max-width:420px; }
+.auth-box .logo{ margin-bottom:50px; display:inline-flex; }
+.auth-tabs{ display:flex; gap:6px; background:var(--panel); border:1px solid var(--panel-border); border-radius:100px; padding:5px; margin-bottom:38px; }
+.auth-tabs button{ flex:1; padding:11px; border-radius:100px; border:none; background:none; color:var(--mist); font-weight:600; font-size:.86rem; transition:all .3s; }
+.auth-tabs button.active{ background:var(--spotlight); color:var(--void); }
+.auth-divider{ display:flex; align-items:center; gap:16px; margin:26px 0; color:var(--mist-dim); font-size:.8rem; }
+.auth-divider::before,.auth-divider::after{ content:''; flex:1; height:1px; background:var(--panel-border); }
+.social-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.social-btn{ display:flex; align-items:center; justify-content:center; gap:10px; border:1px solid var(--panel-border); border-radius:var(--radius-sm); padding:13px; font-size:.86rem; font-weight:600; transition:border-color .3s; }
+.social-btn:hover{ border-color:var(--spotlight); }
+.form-foot{ margin-top:26px; text-align:center; font-size:.88rem; color:var(--mist); }
+.form-foot a{ color:var(--spotlight); font-weight:600; }
+.form-error{ background:rgba(255,107,107,.1); border:1px solid var(--coral); color:var(--coral); padding:12px 16px; border-radius:var(--radius-sm); font-size:.85rem; margin-bottom:20px; display:none; }
+.form-error.is-visible{ display:block; }
+
+/* ==========================================================================
+   DASHBOARD SHELL
+   ========================================================================== */
+.dash{ display:flex; min-height:100vh; }
+.dash-sidebar{
+  width:270px; flex-shrink:0; background:var(--void-soft); border-right:1px solid var(--panel-border);
+  padding:30px 22px; position:fixed; top:0; left:0; bottom:0; z-index:900; display:flex; flex-direction:column;
+  transition:transform .45s var(--ease-stage);
+}
+.dash-sidebar .logo{ margin-bottom:44px; padding-left:10px; }
+.dash-nav{ display:flex; flex-direction:column; gap:4px; flex:1; }
+.dash-nav a{
+  display:flex; align-items:center; gap:14px; padding:13px 14px; border-radius:var(--radius-sm);
+  color:var(--mist); font-size:.92rem; font-weight:600; transition:all .3s;
+}
+.dash-nav a svg{ flex-shrink:0; opacity:.8; }
+.dash-nav a:hover{ background:var(--panel); color:var(--porcelain); }
+.dash-nav a.active{ background:var(--panel-light); color:var(--spotlight); border-left:2px solid var(--spotlight); }
+.dash-nav .divider{ font-family:var(--font-mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mist-dim); padding:20px 14px 8px; }
+.dash-user-mini{ display:flex; align-items:center; gap:12px; padding:14px; border-top:1px solid var(--panel-border); margin-top:10px; }
+.dash-user-mini .avatar{ width:38px; height:38px; border-radius:50%; background:var(--panel-light); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); color:var(--spotlight); font-size:.8rem; }
+.dash-user-mini strong{ display:block; font-size:.86rem; }
+.dash-user-mini span{ font-size:.74rem; color:var(--mist-dim); }
+.sidebar-toggle{ display:none; }
+
+.dash-main{ margin-left:270px; flex:1; min-width:0; padding:34px 40px 80px; transition:margin .45s var(--ease-stage); }
+.dash-topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:36px; gap:20px; }
+.dash-topbar h1{ font-size:1.9rem; }
+.dash-topbar .search{
+  flex:1; max-width:360px; display:flex; align-items:center; gap:10px; background:var(--panel);
+  border:1px solid var(--panel-border); border-radius:100px; padding:11px 20px; color:var(--mist-dim);
+}
+.dash-topbar .search input{ background:none; border:none; color:var(--porcelain); flex:1; outline:none; font-size:.88rem; }
+.topbar-actions{ display:flex; align-items:center; gap:14px; }
+.icon-btn{ width:42px; height:42px; border-radius:50%; border:1px solid var(--panel-border); display:flex; align-items:center; justify-content:center; position:relative; color:var(--mist); transition:border-color .3s, color .3s; }
+.icon-btn:hover{ border-color:var(--spotlight); color:var(--spotlight); }
+.icon-btn .badge{ position:absolute; top:-2px; right:-2px; width:9px; height:9px; border-radius:50%; background:var(--coral); border:2px solid var(--void); }
+.mobile-menu-btn{ display:none; }
+
+.kpi-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin-bottom:34px; }
+.kpi-card{ background:var(--panel); border:1px solid var(--panel-border); border-radius:var(--radius-md); padding:26px; }
+.kpi-card .top{ display:flex; justify-content:space-between; align-items:flex-start; }
+.kpi-card .icon{ width:40px; height:40px; border-radius:11px; background:var(--panel-light); display:flex; align-items:center; justify-content:center; color:var(--spotlight); }
+.kpi-card .delta{ font-family:var(--font-mono); font-size:.74rem; padding:4px 9px; border-radius:100px; }
+.kpi-card .delta.up{ color:var(--emerald); background:rgba(74,222,156,.1); }
+.kpi-card .delta.down{ color:var(--coral); background:rgba(255,107,107,.1); }
+.kpi-card b{ font-family:var(--font-display); font-size:2.1rem; display:block; margin-top:18px; }
+.kpi-card span{ font-size:.82rem; color:var(--mist); margin-top:4px; display:block; }
+
+.panel-grid{ display:grid; grid-template-columns:1.6fr 1fr; gap:24px; margin-bottom:24px; }
+.panel{ background:var(--panel); border:1px solid var(--panel-border); border-radius:var(--radius-md); padding:28px; }
+.panel-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
+.panel-head h3{ font-size:1.15rem; }
+.panel-head a{ font-family:var(--font-mono); font-size:.76rem; color:var(--spotlight); }
+.chart-wrap{ height:280px; position:relative; }
+
+table.data-table{ width:100%; border-collapse:collapse; }
+.data-table th{ text-align:left; font-family:var(--font-mono); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase; color:var(--mist-dim); padding:0 16px 14px; border-bottom:1px solid var(--panel-border); }
+.data-table td{ padding:16px; border-bottom:1px solid var(--panel-border); font-size:.88rem; color:var(--mist); }
+.data-table tr:last-child td{ border-bottom:none; }
+.data-table td.name{ color:var(--porcelain); font-weight:600; }
+.status-pill{ padding:5px 12px; border-radius:100px; font-size:.74rem; font-family:var(--font-mono); }
+.status-pill.confirmed{ background:rgba(74,222,156,.12); color:var(--emerald); }
+.status-pill.pending{ background:rgba(255,180,67,.12); color:var(--spotlight); }
+.status-pill.cancelled{ background:rgba(255,107,107,.12); color:var(--coral); }
+.row-avatar{ width:32px; height:32px; border-radius:50%; object-fit:cover; margin-right:10px; vertical-align:middle; }
+
+.agenda-list .agenda-item{ display:flex; gap:16px; padding:16px 0; border-top:1px solid var(--panel-border); }
+.agenda-list .agenda-item:first-child{ border-top:none; }
+.agenda-time{ font-family:var(--font-mono); font-size:.78rem; color:var(--spotlight); width:56px; flex-shrink:0; }
+.agenda-item h5{ font-size:.94rem; color:var(--porcelain); }
+.agenda-item span{ font-size:.78rem; color:var(--mist-dim); }
+
+.progress-track{ height:6px; border-radius:100px; background:var(--panel-light); overflow:hidden; margin-top:10px; }
+.progress-fill{ height:100%; background:linear-gradient(90deg,var(--spotlight),var(--violet)); border-radius:100px; }
+
+.venue-card{ display:flex; gap:16px; align-items:center; padding:14px; border-radius:var(--radius-sm); transition:background .3s; }
+.venue-card:hover{ background:var(--panel-light); }
+.venue-card img{ width:58px; height:58px; border-radius:12px; object-fit:cover; }
+.venue-card h5{ font-size:.9rem; color:var(--porcelain); }
+.venue-card span{ font-size:.76rem; color:var(--mist-dim); }
+
+/* ==========================================================================
+   MISC UTILITIES
+   ========================================================================== */
+.badge-soft{ display:inline-flex; align-items:center; gap:8px; background:var(--panel-light); border:1px solid var(--panel-border); padding:8px 16px; border-radius:100px; font-size:.78rem; color:var(--mist); }
+.split-cta{ display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap; padding:70px; background:var(--panel); border:1px solid var(--panel-border); border-radius:var(--radius-lg); position:relative; overflow:hidden; }
+.split-cta h2{ font-size:2.6rem; max-width:14ch; color:var(--porcelain); }
+.avatar-stack{ display:flex; }
+.avatar-stack img{ width:40px; height:40px; border-radius:50%; border:2px solid var(--void); object-fit:cover; margin-left:-12px; }
+.avatar-stack img:first-child{ margin-left:0; }
+
+.reveal-up{ opacity:0; transform:translateY(50px); }
+.fade-in{ opacity:0; }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1180px){
+  .container{ padding:0 30px; }
+  .footer-top{ grid-template-columns:1.2fr 1fr 1fr; }
+  .footer-col:last-child{ grid-column:1 / -1; }
+  .panel-grid{ grid-template-columns:1fr; }
+}
+
+@media (max-width: 1024px){
+  .nav-links{ display:none; }
+  .nav-toggle{ display:flex; }
+  .grid-3{ grid-template-columns:repeat(2,1fr); }
+  .grid-4{ grid-template-columns:repeat(2,1fr); }
+  .stat-row{ grid-template-columns:repeat(2,1fr); row-gap:36px; }
+  .blog-featured{ grid-template-columns:1fr; }
+  .auth-shell{ grid-template-columns:1fr; }
+  .auth-visual{ display:none; }
+  .kpi-row{ grid-template-columns:repeat(2,1fr); }
+  .split-cta{ padding:50px; }
+  .split-cta h2{ font-size:2.1rem; }
+
+  .dash-sidebar{ transform:translateX(-100%); box-shadow:20px 0 60px rgba(0,0,0,.4); }
+  .dash-sidebar.is-open{ transform:translateX(0); }
+  .dash-main{ margin-left:0; padding:26px 24px 70px; }
+  .mobile-menu-btn{ display:flex; align-items:center; justify-content:center; width:42px; height:42px; border-radius:50%; border:1px solid var(--panel-border); }
+  .dash-topbar .search{ display:none; }
+}
+
+@media (max-width: 860px){
+  .section{ padding:64px 0; }
+  .section-tight{ padding:38px 0; }
+  .grid-2{ grid-template-columns:1fr; }
+  .field-row{ grid-template-columns:1fr; }
+  .footer-top{ grid-template-columns:1fr 1fr; gap:36px; }
+  .footer-col:last-child{ grid-column:auto; }
+  .pricing-card.is-featured{ order:-1; }
+  .timeline::before{ left:60px; }
+  .timeline-item{ grid-template-columns:60px 1fr; gap:24px; }
+  .timeline-item .dot{ left:55px; }
+}
+
+@media (max-width: 640px){
+  .container{ padding:0 22px; }
+  .hero-inner{ padding:40px 22px 0; }
+  .hero-actions{ flex-direction:column; align-items:flex-start; gap:18px; }
+  .grid-3, .grid-4{ grid-template-columns:1fr; }
+  .stat-row{ grid-template-columns:1fr 1fr; }
+  .kpi-row{ grid-template-columns:1fr; }
+  .split-cta{ flex-direction:column; align-items:flex-start; text-align:left; }
+  .footer-top{ grid-template-columns:1fr; gap:34px; }
+  .footer-bottom{ flex-direction:column; gap:10px; text-align:center; }
+  .page-head{ padding:calc(var(--nav-h) + 50px) 0 60px; }
+  .mobile-menu a{ font-size:1.9rem; }
+  .card{ padding:28px; }
+  .social-row{ grid-template-columns:1fr; }
+  .auth-form-side{ padding:40px 24px; }
+  .dash-main{ padding:22px 16px 60px; }
+  .panel{ padding:20px; }
+}
+
+@media (max-width: 380px){
+  .hero h1{ font-size:2.5rem; }
+  .stat b{ font-size:2.2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="spotlight-cursor"></div>
+
+<!-- ============ NAV ============ -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><img src="./stackly.png" alt="Stackly"></a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Contact</a>
+      <a href="login.html">Login</a>
+    </div>
+    <div class="nav-cta">
+      <!-- <a href="login.html" class="nav-icon-link" aria-label="Log in"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21a8 8 0 1 0-16 0"/><circle cx="12" cy="7" r="4"/></svg>Login</a> -->
+      <!-- <a href="contact.html" class="btn btn-primary btn-sm">Book Now</a> -->
+      <button class="nav-toggle" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu">
+  <button class="mobile-close" aria-label="Close menu"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg></button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="services.html">Services</a>
+  <a href="blog.html">Blog</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Login</a>
+  <a href="contact.html" class="btn btn-primary">Book Now</a>
+</div>
+
+<!-- ============ HERO ============ -->
+<header class="hero grain">
+  <div class="hero-media"><img src="https://images.unsplash.com/photo-1762968274962-20c12e6e8ecd?auto=format&fit=crop&w=1800&q=80" alt="" loading="eager"></div>
+  <div class="stage-field">
+    <div class="blob blob-amber" style="top:-10%; left:8%;"></div>
+    <div class="blob blob-violet" style="bottom:-15%; right:5%;"></div>
+  </div>
+  <div class="hero-inner">
+    <span class="eyebrow fade-in">Corporate event booking, curated</span>
+    <h1 data-split-hero style="margin-top:22px;">Every event is a stage. We book it <em>right.</em></h1>
+    <p class="hero-sub" data-fade-up>Stackly Events plans and books conferences, product launches, galas and offsites end-to-end — venue, production, catering and guest experience, coordinated from one dashboard.</p>
+    <div class="hero-actions">
+      <a href="contact.html" class="btn btn-primary" data-fade-up>Check availability</a>
+      <a href="services.html" class="btn btn-ghost" data-fade-up>Explore services</a>
+    </div>
+    <div class="hero-note" data-fade-up style="margin-top:36px;">
+      <span class="pulse-dot"></span> Next open production slot — 22 September, Chennai
+    </div>
+  </div>
+
+  <div class="ticker">
+    <div class="ticker-track" data-speed="32">
+      <span><b>Conferences</b> · full production</span>
+      <span><b>Product launches</b> · stage &amp; AV</span>
+      <span><b>Galas &amp; awards</b> · ballroom design</span>
+      <span><b>Team offsites</b> · venue &amp; travel</span>
+      <span><b>Board summits</b> · hybrid streaming</span>
+      <span><b>Workshops</b> · breakout planning</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STATS ============ -->
+<section class="section-tight">
+  <div class="container">
+    <div class="stat-row">
+      <div class="stat reveal-up"><b><span data-count="412">0</span><span class="unit">+</span></b><span>Events produced</span></div>
+      <div class="stat reveal-up"><b><span data-count="96">0</span><span class="unit">%</span></b><span>Client rebooking rate</span></div>
+      <div class="stat reveal-up"><b><span data-count="38">0</span><span class="unit">+</span></b><span>Partner venues</span></div>
+      <div class="stat reveal-up"><b><span data-count="12">0</span><span class="unit">yrs</span></b><span>Producing at scale</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES OVERVIEW ============ -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">What we book</span>
+      <h2 style="font-size:clamp(2rem,4vw,2.8rem); margin-top:18px;">Four formats, one production standard</h2>
+      <p>Whichever room you need, the same team of producers, venue scouts and vendors shows up — briefed, on time, and accountable to your run sheet.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card reveal-up" data-tilt>
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg></div>
+        <span class="num">01 — Conferences</span>
+        <h3>Keynotes &amp; summits</h3>
+        <p>Stage design, speaker logistics, AV and simultaneous streaming for 100 to 3,000 attendees.</p>
+      </div>
+      <div class="card reveal-up" data-tilt>
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l1.8 5.5H19l-4.6 3.4 1.8 5.5-4.6-3.4L7 16.4l1.8-5.5L4.2 7.5h5.4z"/></svg></div>
+        <span class="num">02 — Launches</span>
+        <h3>Product reveals</h3>
+        <p>Reveal choreography, press logistics and lighting built around a single unveiling moment.</p>
+      </div>
+      <div class="card reveal-up" data-tilt>
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c4.97-4.97 8-8.24 8-12a8 8 0 1 0-16 0c0 3.76 3.03 7.03 8 12z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+        <span class="num">03 — Galas</span>
+        <h3>Awards &amp; galas</h3>
+        <p>Ballroom design, seating strategy and entertainment booking for evenings that need to land.</p>
+      </div>
+      <div class="card reveal-up" data-tilt>
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m5-4a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm6 4a4 4 0 1 0 0-8"/></svg></div>
+        <span class="num">04 — Offsites</span>
+        <h3>Team offsites</h3>
+        <p>Retreat venues, travel blocks and facilitation for teams that need to reset and align.</p>
+      </div>
+      <div class="card reveal-up" data-tilt>
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v4H4zM4 12h16v8H4z"/></svg></div>
+        <span class="num">05 — Hybrid</span>
+        <h3>Board &amp; hybrid summits</h3>
+        <p>Broadcast-grade streaming layered onto an intimate in-room format for distributed leadership.</p>
+      </div>
+      <div class="card reveal-up" data-tilt>
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <span class="num">06 — Workshops</span>
+        <h3>Workshops &amp; training</h3>
+        <p>Breakout rooms, materials and catering timed to a working agenda, not a party one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURED VENUE / IMAGE SHOWCASE ============ -->
+<section class="section" style="background:var(--void-soft);">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Inside the rooms</span>
+      <h2 style="font-size:clamp(2rem,4vw,2.8rem); margin-top:18px;">Spaces we know by their acoustics, not just their photos</h2>
+    </div>
+    <div class="grid-3">
+      <div class="media-card reveal-up">
+        <div class="reveal-frame frame" style="aspect-ratio:4/5;">
+          <div class="reveal-veil"></div>
+          <img src="https://images.unsplash.com/photo-1762968274962-20c12e6e8ecd?auto=format&fit=crop&w=1600&q=80" alt="Keynote speaker on a lit conference stage" loading="lazy">
+        </div>
+        <div class="caption"><h4>The Amphitheatre</h4><span>1,200-seat keynote hall · Chennai</span></div>
+      </div>
+      <div class="media-card reveal-up">
+        <div class="reveal-frame frame" style="aspect-ratio:4/5;">
+          <div class="reveal-veil"></div>
+          <img src="https://images.unsplash.com/photo-1763231575952-98244918f99b?auto=format&fit=crop&w=1600&q=80" alt="Ornate ballroom set for a gala dinner" loading="lazy">
+        </div>
+        <div class="caption"><h4>Grand Atrium</h4><span>Ballroom &amp; gala venue · Bengaluru</span></div>
+      </div>
+      <div class="media-card reveal-up">
+        <div class="reveal-frame frame" style="aspect-ratio:4/5;">
+          <div class="reveal-veil"></div>
+          <img src="https://images.unsplash.com/photo-1727931301188-55b23fa9672e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGZ1bmN0aW9uJTIwd2FpdGluZyUyMEhhbGx8ZW58MHx8MHx8fDA%3D" alt="Glass-walled corporate atrium" loading="lazy">
+        </div>
+        <div class="caption"><h4>Skyline Hall</h4><span>Glass atrium, city views · Mumbai</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROCESS TIMELINE ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">How booking works</span>
+      <h2 style="font-size:clamp(2rem,4vw,2.8rem); margin-top:18px;">From brief to curtain call</h2>
+      <p>A typical booking moves through five checkpoints — each with a named owner on our side, visible to you in the dashboard.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item reveal-up">
+        <div class="time">Day 1</div>
+        <div class="dot"></div>
+        <div><h4>Brief &amp; budget</h4><p>We scope headcount, format and budget ceiling, and shortlist three venues that fit your date.</p></div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="time">Day 3</div>
+        <div class="dot"></div>
+        <div><h4>Venue walkthrough</h4><p>A producer walks the shortlisted rooms with you, live or on video, and locks the floor plan.</p></div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="time">Day 7</div>
+        <div class="dot"></div>
+        <div><h4>Production plan</h4><p>Stage, AV, catering and décor vendors are booked against your run sheet and confirmed in writing.</p></div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="time">Day 21</div>
+        <div class="dot"></div>
+        <div><h4>Guest experience</h4><p>Invitations, RSVP tracking and on-site registration are configured inside your dashboard.</p></div>
+      </div>
+      <div class="timeline-item reveal-up">
+        <div class="time">Event day</div>
+        <div class="dot"></div>
+        <div><h4>Live production</h4><p>A producer runs the floor from load-in to strike, with a live channel open to your team.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WHY STACKLY ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Why teams choose us</span>
+      <h2 style="font-size:clamp(2rem,4vw,2.8rem); margin-top:18px;">Three reasons the rebooking rate sits at 96%</h2>
+      <p>It isn't the venues alone — plenty of planners have a venue list. It's what happens between the brief and the load-out.</p>
+    </div>
+    <div class="grid-3">
+      <div class="card reveal-up" data-tilt>
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21a8 8 0 1 0-16 0"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <span class="num">One producer</span>
+        <h3>A named owner, not a queue</h3>
+        <p>The person who scopes your brief on day one is the same person running the floor on event day — no handoffs, no re-explaining the plan.</p>
+      </div>
+      <div class="card reveal-up" data-tilt>
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16v4H4zM4 12h16v8H4z"/></svg></div>
+        <span class="num">One dashboard</span>
+        <h3>Budget, run sheet, RSVPs — visible</h3>
+        <p>Every vendor confirmation, budget line and guest reply lands in the same live dashboard your whole team can see, right from your phone.</p>
+      </div>
+      <div class="card reveal-up" data-tilt>
+        <div class="card-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c4.97-4.97 8-8.24 8-12a8 8 0 1 0-16 0c0 3.76 3.03 7.03 8 12z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+        <span class="num">One backup plan</span>
+        <h3>Written before your deposit clears</h3>
+        <p>Every booking includes a contingency venue and budget line agreed in advance, so a vendor cancellation never becomes your problem to solve alone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIAL ============ -->
+<section class="section" style="background:var(--void-soft);">
+  <div class="container">
+    <div class="quote-block reveal-up">
+      <p>&ldquo;Stackly ran our 900-person product launch like it was the tenth time they'd done exactly this room — because, honestly, it might have been. The dashboard meant our CMO could see the run sheet from her phone at the airport.&rdquo;</p>
+      <div class="who">HARINI SUNDARAM — VP MARKETING, LUMEN SYSTEMS</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GALLERY STRIP ============ -->
+<section class="section-tight">
+  <div class="container">
+    <div class="grid-4">
+      <div class="reveal-frame reveal-up" style="aspect-ratio:1;"><div class="reveal-veil"></div><img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=900&q=80" alt="Full conference audience" loading="lazy"></div>
+      <div class="reveal-frame reveal-up" style="aspect-ratio:1;"><div class="reveal-veil"></div><img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=900&q=80" alt="Team celebrating at an event" loading="lazy"></div>
+      <div class="reveal-frame reveal-up" style="aspect-ratio:1;"><div class="reveal-veil"></div><img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80" alt="Stage lighting rig" loading="lazy"></div>
+      <div class="reveal-frame reveal-up" style="aspect-ratio:1;"><div class="reveal-veil"></div><img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=900&q=80" alt="Guests networking at a corporate event" loading="lazy"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BLOG PREVIEW ============ -->
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">From the run sheet</span>
+      <h2 style="font-size:clamp(2rem,4vw,2.8rem); margin-top:18px;">Notes on producing better events</h2>
+    </div>
+    <div class="grid-3">
+      <a href="blog.html" class="media-card reveal-up">
+        <div class="frame" style="aspect-ratio:16/11; border-radius:var(--radius-lg); overflow:hidden;"><img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=900&q=80" alt="Business meeting" loading="lazy"></div>
+        <div class="caption"><span>PLANNING · 6 MIN READ</span><h4>The 90-day venue booking checklist</h4></div>
+      </a>
+      <a href="blog.html" class="media-card reveal-up">
+        <div class="frame" style="aspect-ratio:16/11; border-radius:var(--radius-lg); overflow:hidden;"><img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80" alt="Team planning around a table" loading="lazy"></div>
+        <div class="caption"><span>PRODUCTION · 5 MIN READ</span><h4>What a run-of-show should actually contain</h4></div>
+      </a>
+      <a href="blog.html" class="media-card reveal-up">
+        <div class="frame" style="aspect-ratio:16/11; border-radius:var(--radius-lg); overflow:hidden;"><img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=900&q=80" alt="Small team huddled in discussion" loading="lazy"></div>
+        <div class="caption"><span>BUDGETING · 4 MIN READ</span><h4>Where corporate event budgets quietly leak</h4></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="section-tight">
+  <div class="container">
+    <div class="split-cta reveal-up">
+      <div>
+        <span class="eyebrow">Next available production slot: 22 September</span>
+        <h2 style="margin-top:16px;">Tell us the date. We'll hold the room.</h2>
+      </div>
+      <a href="contact.html" class="btn btn-primary">Check availability</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="logo"><img src="./stackly.png" alt="Stackly"></a>
+        <p>Corporate events, engineered like a production — from keynote stages to gala finales, booked and run from one dashboard.</p>
+        <div class="footer-social">
+          <a href="error.html" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="error.html" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M7 10v7M7 7v.01M11 17v-4a2 2 0 0 1 4 0v4M11 13v4"/></svg></a>
+          <!-- WhatsApp -->
+          <a href="error.html" aria-label="WhatsApp">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 11.5a8.5 8.5 0 0 1-12.5 7.5L3 21l2-5.5A8.5 8.5 0 1 1 21 11.5z"/>
+              <path d="M9 8.5c.5 2 2 3.5 4 4.5l1.5-1c.5-.3 1-.2 1.4.1l1.1.8c.4.3.5.8.3 1.2-.5 1-1.5 1.5-2.5 1.4-3.5-.5-6.8-3.8-7.3-7.3-.1-1 .4-2 1.4-2.5.4-.2.9-.1 1.2.3l.8 1.1c.3.4.4.9.1 1.4L9 8.5z"/>
+            </svg>
+          </a>
+
+          <!-- Mail -->
+          <a href="error.html" aria-label="Email">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <path d="M3 7l9 6 9-6"/>
+            </svg>
+          </a>
+          <!-- <a href="#" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4l16 16M20 4L4 20"/></svg></a> -->
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="blog.html">Blog</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h5>Formats</h5>
+        <a href="services.html">Conferences</a>
+        <a href="services.html">Product launches</a>
+        <a href="services.html">Galas &amp; awards</a>
+        <a href="services.html">Team offsites</a>
+      </div>
+      <div class="footer-col">
+        <h5>Get in touch</h5>
+        <a href="mailto:hello@stackly.events">hello@stackly.events</a>
+        <a href="tel:+914272200100">+91 427 220 0100</a>
+        <span style="display:block; color:var(--mist); padding:7px 0; font-size:.92rem;">Salem, Tamil Nadu, India</span>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Stackly Events. All rights reserved.</span>
+      <span>Built by Stackly</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  if (window.gsap) {
+    gsap.registerPlugin(ScrollTrigger);
+  }
+
+  /* ---------------------------------------------------------------------
+     1. TEXT SPLIT (manual SplitText-style word/char wrap, GSAP free-tier)
+     -------------------------------------------------------------------- */
+  function splitChars(el){
+    const text = el.textContent;
+    el.textContent = '';
+    const words = text.split(' ');
+    words.forEach((word, wi) => {
+      const wordSpan = document.createElement('span');
+      wordSpan.className = 'word';
+      [...word].forEach(ch => {
+        const charSpan = document.createElement('span');
+        charSpan.className = 'char';
+        charSpan.textContent = ch;
+        wordSpan.appendChild(charSpan);
+      });
+      el.appendChild(wordSpan);
+      if (wi < words.length - 1) el.appendChild(document.createTextNode('\u00A0'));
+    });
+    return el.querySelectorAll('.char');
+  }
+
+  const heroHeading = document.querySelector('[data-split-hero]');
+  let heroChars = [];
+  if (heroHeading) heroChars = splitChars(heroHeading);
+
+  /* ---------------------------------------------------------------------
+     2. LOAD-IN TIMELINE (hero)
+     -------------------------------------------------------------------- */
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+
+  if (heroChars.length) {
+    gsap.set(heroChars, { yPercent: 130, rotate: 6 });
+    tl.to(heroChars, { yPercent: 0, rotate: 0, duration: 1.1, stagger: 0.018 }, 0.15);
+  }
+  tl.from('[data-fade-up]', { y: 26, opacity: 0, duration: 0.9, stagger: 0.12 }, 0.55)
+    .from('.nav-inner', { y: -20, opacity: 0, duration: 0.7 }, 0)
+    .from('.ticker', { opacity: 0, duration: 1 }, 0.9);
+
+  /* ---------------------------------------------------------------------
+     3. AMBIENT BLOB / BACKGROUND MOTION (webflow-style floating gradients)
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('.stage-field').forEach(field => {
+    const blobs = field.querySelectorAll('.blob');
+    blobs.forEach((blob, i) => {
+      gsap.to(blob, {
+        x: () => gsap.utils.random(-120, 120),
+        y: () => gsap.utils.random(-90, 90),
+        duration: () => gsap.utils.random(9, 15),
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: i * 0.6
+      });
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     4. SPOTLIGHT CURSOR
+     -------------------------------------------------------------------- */
+  const cursor = document.querySelector('.spotlight-cursor');
+  if (cursor && window.matchMedia('(hover: hover)').matches) {
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let cx = mx, cy = my;
+    window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    gsap.ticker.add(() => {
+      cx += (mx - cx) * 0.12;
+      cy += (my - cy) * 0.12;
+      cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`;
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     5. SCROLL REVEALS
+     -------------------------------------------------------------------- */
+  gsap.utils.toArray('.reveal-up').forEach((el, i) => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' },
+      delay: (i % 3) * 0.08
+    });
+  });
+
+  gsap.utils.toArray('.fade-in').forEach(el => {
+    gsap.to(el, {
+      opacity: 1, duration: 1.1, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 90%' }
+    });
+  });
+
+  // Section eyebrow + heading combo reveal
+  gsap.utils.toArray('.section-head').forEach(head => {
+    gsap.from(head.children, {
+      y: 24, opacity: 0, duration: 0.8, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: head, start: 'top 88%' }
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     6. IMAGE REVEAL (clip veil wipe)
+     -------------------------------------------------------------------- */
+  gsap.utils.toArray('.reveal-frame').forEach(frame => {
+    const veil = frame.querySelector('.reveal-veil');
+    const img = frame.querySelector('img');
+    if (!veil) return;
+    const t = gsap.timeline({ scrollTrigger: { trigger: frame, start: 'top 85%' } });
+    t.set(img, { scale: 1.25 })
+     .to(veil, { scaleY: 0, duration: 0.9, ease: 'power4.inOut' })
+     .to(img, { scale: 1, duration: 1.3, ease: 'power3.out' }, '-=0.6');
+  });
+
+  /* ---------------------------------------------------------------------
+     7. COUNTERS
+     -------------------------------------------------------------------- */
+  gsap.utils.toArray('[data-count]').forEach(el => {
+    const end = parseFloat(el.dataset.count);
+    const decimals = (el.dataset.count.split('.')[1] || '').length;
+    const counter = { val: 0 };
+    ScrollTrigger.create({
+      trigger: el, start: 'top 90%', once: true,
+      onEnter: () => {
+        gsap.to(counter, {
+          val: end, duration: 1.8, ease: 'power2.out',
+          onUpdate: () => { el.textContent = counter.val.toFixed(decimals); }
+        });
+      }
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     8. HOVER TILT ON CARDS (subtle 3D)
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('[data-tilt]').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      gsap.to(card, { rotateX: py * -6, rotateY: px * 6, duration: 0.5, ease: 'power2.out', transformPerspective: 800 });
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' });
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     9. NAV: scroll state + active link + mobile off-canvas
+     -------------------------------------------------------------------- */
+  const nav = document.querySelector('.site-nav');
+  if (nav) {
+    ScrollTrigger.create({
+      start: 'top -60',
+      onUpdate: self => nav.classList.toggle('is-scrolled', self.scroll() > 60)
+    });
+  }
+
+  const toggle = document.querySelector('.nav-toggle');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  if (toggle && mobileMenu) {
+    const menuLinks = mobileMenu.querySelectorAll('a, .btn');
+    let open = false;
+    const mtl = gsap.timeline({ paused: true })
+      .to(mobileMenu, { y: 0, duration: 0.55, ease: 'power4.inOut' })
+      .set(mobileMenu, { pointerEvents: 'auto' }, 0)
+      .to(menuLinks, { opacity: 1, y: 0, duration: 0.5, stagger: 0.06 }, 0.2);
+    gsap.set(mobileMenu, { yPercent: 0, y: '-100%' });
+    gsap.set(menuLinks, { y: 20 });
+
+    toggle.addEventListener('click', () => {
+      open = !open;
+      toggle.classList.toggle('is-open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+      if (open) { mtl.play(); } else { mtl.reverse(); }
+    });
+    menuLinks.forEach(l => l.addEventListener('click', () => {
+      open = false; toggle.classList.remove('is-open'); document.body.style.overflow = '';
+      mtl.reverse();
+    }));
+    const mobileClose = mobileMenu.querySelector('.mobile-close');
+    if (mobileClose) mobileClose.addEventListener('click', () => {
+      open = false; toggle.classList.remove('is-open'); document.body.style.overflow = '';
+      mtl.reverse();
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     10. TICKER (marquee) — auto scroll, duplicated for seamless loop
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('.ticker-track').forEach(track => {
+    track.innerHTML += track.innerHTML;
+    const distance = track.scrollWidth / 2;
+    gsap.to(track, {
+      x: -distance, duration: parseFloat(track.dataset.speed || 28), ease: 'none', repeat: -1
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     11. DASHBOARD SIDEBAR (mobile)
+     -------------------------------------------------------------------- */
+  const sidebarToggle = document.querySelector('.mobile-menu-btn');
+  const sidebar = document.querySelector('.dash-sidebar');
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('is-open'));
+    document.addEventListener('click', e => {
+      if (sidebar.classList.contains('is-open') && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+        sidebar.classList.remove('is-open');
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     12. FAQ ACCORDION (used on services page)
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    if (!q || !a) return;
+    gsap.set(a, { height: 0, overflow: 'hidden' });
+    q.addEventListener('click', () => {
+      const isOpen = item.classList.toggle('is-open');
+      gsap.to(a, { height: isOpen ? 'auto' : 0, duration: 0.5, ease: 'power3.inOut' });
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     13. FILTER PILLS (blog / services)
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('.filter-row').forEach(row => {
+    const pills = row.querySelectorAll('.filter-pill');
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const target = pill.dataset.filter;
+        const grid = document.querySelector(row.dataset.target);
+        if (!grid) return;
+        grid.querySelectorAll('[data-category]').forEach(item => {
+          const show = target === 'all' || item.dataset.category === target;
+          gsap.to(item, { opacity: show ? 1 : 0, scale: show ? 1 : 0.92, duration: 0.35, ease: 'power2.out',
+            onStart: () => { if (show) item.style.display = ''; },
+            onComplete: () => { if (!show) item.style.display = 'none'; } });
+        });
+      });
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     14. SMOOTH ANCHOR + ACTIVE NAV BY URL
+     -------------------------------------------------------------------- */
+  const path = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links a, .mobile-menu a, .dash-nav a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href === path) a.classList.add('active');
+  });
+
+});
+</script>
+</body>
+</html>
