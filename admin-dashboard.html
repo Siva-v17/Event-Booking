@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard — Stackly Events</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ==========================================================================
+   DASHBOARD OVERRIDES — sidebar spacing, card hover, mobile close icon,
+   in-page nav content switching, and responsive fixes.
+   ========================================================================== */
+.dash-sidebar{
+  width:250px; padding:22px 16px;
+}
+.dash-sidebar .logo{ margin-bottom:0; padding-left:6px; display:inline-block; }
+.dash-sidebar .logo img{ height:70px; display:block; }
+.dash-sidebar .dash-user-mini{ margin-top:0; }
+.dash-nav{ gap:2px; }
+.dash-nav a{ padding:10px 12px; gap:12px; font-size:.9rem; }
+.dash-nav .divider{ padding:14px 12px 6px; }
+.dash-user-mini{ padding:10px; margin-top:6px; gap:10px; }
+.dash-user-mini .avatar{ width:34px; height:34px; font-size:.76rem; }
+.dash-user-mini strong{ font-size:.84rem; }
+.dash-user-mini span{ font-size:.72rem; }
+
+/* Sidebar close icon (mobile) */
+.sidebar-close{
+  display:none; position:absolute; top:20px; right:14px; width:34px; height:34px; border-radius:50%;
+  border:1px solid var(--panel-border); background:none; color:var(--mist); align-items:center; justify-content:center;
+  transition:border-color .3s, color .3s, transform .3s;
+}
+.sidebar-close:hover{ border-color:var(--spotlight); color:var(--spotlight); transform:rotate(90deg); }
+
+/* Sidebar nav content views */
+.dash-view{ display:none; }
+.dash-view.is-active{ display:block; }
+.view-placeholder{ text-align:center; padding:70px 20px; }
+.view-placeholder .icon-circle{
+  width:64px; height:64px; border-radius:50%; background:var(--panel-light); color:var(--spotlight);
+  display:flex; align-items:center; justify-content:center; margin:0 auto 22px;
+}
+.view-placeholder h2{ font-size:1.5rem; color:var(--porcelain); }
+.view-placeholder p{ color:var(--mist); margin-top:12px; max-width:44ch; margin-left:auto; margin-right:auto; }
+
+/* Card hover effects */
+.kpi-card{ transition:transform .45s cubic-bezier(.16,.84,.44,1), border-color .35s, box-shadow .45s; }
+.kpi-card:hover{ transform:translateY(-6px); border-color:var(--spotlight-dim); box-shadow:0 22px 44px -24px rgba(0,0,0,.55); }
+.panel{ transition:border-color .35s, box-shadow .45s, transform .45s cubic-bezier(.16,.84,.44,1); }
+.panel:hover{ transform:translateY(-4px); border-color:var(--spotlight-dim); box-shadow:0 22px 44px -26px rgba(0,0,0,.5); }
+
+/* Overflow safety net — nothing inside the shell should force horizontal scroll */
+.dash-main{ max-width:100%; overflow-x:hidden; }
+.dash-topbar{ min-width:0; }
+
+/* Responsive corrections */
+@media (max-width: 1024px){
+  .sidebar-close{ display:flex; }
+  .kpi-row{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width: 860px){
+  .dash-topbar{ flex-wrap:wrap; row-gap:16px; }
+  .mobile-menu-btn{ order:1; }
+  .dash-topbar > div:nth-child(2){ order:2; flex:1 1 auto; min-width:0; }
+  .dash-topbar .search{ order:3; flex-basis:100%; max-width:none; }
+  .topbar-actions{ order:4; width:100%; justify-content:flex-end; flex-wrap:wrap; row-gap:10px; margin-left:0; }
+}
+@media (max-width: 640px){
+  .dash-topbar h1{ font-size:1.5rem; }
+  .kpi-card{ padding:20px; }
+  .kpi-card b{ font-size:1.7rem; }
+  .dash-sidebar{ width:82vw; max-width:300px; }
+  .topbar-actions .btn-sm{ padding:10px 18px; font-size:.8rem; }
+}
+@media (max-width: 380px){
+  .kpi-row{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="dash">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="dash-sidebar">
+    <button class="sidebar-close" aria-label="Close menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    <a href="index.html" class="logo"><img src="./stackly.png" alt="Stackly"></a>
+    <div class="dash-user-mini">
+      <div class="avatar" data-user-initial>PR</div>
+      <div style="flex:1; min-width:0;"><strong data-user-name>Priya Raman</strong><span data-user-email>admin@stackly.events</span><strong>Administrator</strong></div>
+    </div>
+    <nav class="dash-nav">
+      <a href="admin-dashboard.html" class="active" data-section="overview"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg> Overview</a>
+      <a href="#" data-section="bookings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4m8-4v4"/></svg> Bookings</a>
+      <a href="#" data-section="venues"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c4.97-4.97 8-8.24 8-12a8 8 0 1 0-16 0c0 3.76 3.03 7.03 8 12z"/><circle cx="12" cy="9" r="2.5"/></svg> Venues</a>
+      <a href="#" data-section="clients"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m5-4a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg> Clients</a>
+      <a href="#" data-section="reports"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18M7 15l4-5 3 3 5-7"/></svg> Reports</a>
+      <span class="divider">Manage</span>
+      <a href="#" data-section="settings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg> Settings</a>
+      <a href="login.html"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Logout</a>
+    </nav>
+    
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <main class="dash-main">
+    <div class="dash-topbar">
+      <button class="mobile-menu-btn" aria-label="Toggle sidebar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div>
+        <h1>Studio overview</h1>
+        <p style="color:var(--mist-dim); font-size:.85rem; margin-top:4px;">Friday, 14 August 2026 · All venues</p>
+      </div>
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="text" id="dashSearchInput" placeholder="Search bookings, clients, venues…">
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" aria-label="Notifications"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="badge"></span></button>
+        <a href="contact.html" class="btn btn-primary btn-sm">+ New booking</a>
+      </div>
+    </div>
+
+    <div class="dash-view is-active" id="view-overview">
+    <!-- KPIs -->
+    <div class="kpi-row">
+      <div class="kpi-card reveal-up">
+        <div class="top"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><span class="delta up">▲ 18%</span></div>
+        <b>₹<span data-count="38.4">0</span>L</b>
+        <span>Revenue this month</span>
+      </div>
+      <div class="kpi-card reveal-up">
+        <div class="top"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4m8-4v4"/></svg></div><span class="delta up">▲ 6</span></div>
+        <b><span data-count="21">0</span></b>
+        <span>Active bookings</span>
+      </div>
+      <div class="kpi-card reveal-up">
+        <div class="top"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c4.97-4.97 8-8.24 8-12a8 8 0 1 0-16 0c0 3.76 3.03 7.03 8 12z"/></svg></div><span class="delta up">▲ 3</span></div>
+        <b><span data-count="38">0</span></b>
+        <span>Partner venues</span>
+      </div>
+      <div class="kpi-card reveal-up">
+        <div class="top"><div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m5-4a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg></div><span class="delta down">▼ 2%</span></div>
+        <b><span data-count="96">0</span>%</b>
+        <span>Client rebooking rate</span>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="panel-grid">
+      <div class="panel reveal-up">
+        <div class="panel-head"><h3>Revenue &amp; bookings trend</h3><a href="#">Export ↓</a></div>
+        <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+      </div>
+      <div class="panel reveal-up">
+        <div class="panel-head"><h3>Event mix</h3></div>
+        <div class="chart-wrap"><canvas id="eventTypeChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="panel-grid">
+      <div class="panel reveal-up">
+        <div class="panel-head"><h3>Recent bookings</h3><a href="#">View all</a></div>
+        <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead><tr><th>Client</th><th>Format</th><th>Venue</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td class="name"><img class="row-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="">Lumen Systems</td><td>Product launch</td><td>Skyline Hall</td><td>02 Sep</td><td><span class="status-pill confirmed">Confirmed</span></td></tr>
+            <tr><td class="name"><img class="row-avatar" src="https://randomuser.me/api/portraits/men/36.jpg" alt="">Orbit Finance</td><td>Board summit</td><td>Executive Suite</td><td>09 Sep</td><td><span class="status-pill confirmed">Confirmed</span></td></tr>
+            <tr><td class="name"><img class="row-avatar" src="https://randomuser.me/api/portraits/women/68.jpg" alt="">Northwind Retail</td><td>Gala &amp; awards</td><td>Grand Atrium</td><td>15 Sep</td><td><span class="status-pill pending">Pending</span></td></tr>
+            <tr><td class="name"><img class="row-avatar" src="https://randomuser.me/api/portraits/men/12.jpg" alt="">Cedar Analytics</td><td>Conference</td><td>The Amphitheatre</td><td>22 Sep</td><td><span class="status-pill confirmed">Confirmed</span></td></tr>
+            <tr><td class="name"><img class="row-avatar" src="https://randomuser.me/api/portraits/women/23.jpg" alt="">Vantage Health</td><td>Team offsite</td><td>Garden Pavilion</td><td>28 Sep</td><td><span class="status-pill cancelled">Cancelled</span></td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+      <div class="panel reveal-up">
+        <div class="panel-head"><h3>Venue utilisation</h3></div>
+        <div class="chart-wrap" style="height:230px;"><canvas id="venueChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="panel-grid">
+      <div class="panel reveal-up">
+        <div class="panel-head"><h3>Today's agenda</h3><span style="font-family:var(--font-mono); font-size:.76rem; color:var(--mist-dim);">5 items</span></div>
+        <div class="agenda-list">
+          <div class="agenda-item"><div class="agenda-time">09:00</div><div><h5>Venue walkthrough — Skyline Hall</h5><span>With Lumen Systems production team</span></div></div>
+          <div class="agenda-item"><div class="agenda-time">11:30</div><div><h5>Vendor call — AV &amp; lighting</h5><span>Confirm rig for Cedar Analytics conference</span></div></div>
+          <div class="agenda-item"><div class="agenda-time">13:00</div><div><h5>Budget review — Northwind gala</h5><span>Décor and entertainment quotes due</span></div></div>
+          <div class="agenda-item"><div class="agenda-time">15:30</div><div><h5>Client call — Orbit Finance</h5><span>Board summit hybrid streaming setup</span></div></div>
+          <div class="agenda-item"><div class="agenda-time">17:00</div><div><h5>Debrief — August events</h5><span>Compile producer notes for monthly report</span></div></div>
+        </div>
+      </div>
+      <div class="panel reveal-up">
+        <div class="panel-head"><h3>Top venues this quarter</h3></div>
+        <div class="venue-card"><img src="https://images.unsplash.com/photo-1762968274962-20c12e6e8ecd?auto=format&fit=crop&w=200&q=80" alt=""><div><h5>The Amphitheatre</h5><span>Chennai · 88% booked</span></div></div>
+        <div class="venue-card"><img src="https://images.unsplash.com/photo-1763231575952-98244918f99b?auto=format&fit=crop&w=200&q=80" alt=""><div><h5>Grand Atrium</h5><span>Bengaluru · 74% booked</span></div></div>
+        <div class="venue-card"><img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=200&q=80" alt=""><div><h5>Skyline Hall</h5><span>Mumbai · 65% booked</span></div></div>
+      </div>
+    </div>
+    </div>
+    <!-- /view-overview -->
+
+    <div class="dash-view" id="view-bookings">
+      <div class="panel view-placeholder">
+        <div class="icon-circle"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4m8-4v4"/></svg></div>
+        <h2>Bookings</h2>
+        <p>21 active bookings across all venues. The full bookings pipeline — confirmed, pending and cancelled — lives here.</p>
+      </div>
+    </div>
+
+    <div class="dash-view" id="view-venues">
+      <div class="panel view-placeholder">
+        <div class="icon-circle"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c4.97-4.97 8-8.24 8-12a8 8 0 1 0-16 0c0 3.76 3.03 7.03 8 12z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+        <h2>Venues</h2>
+        <p>38 partner venues. Utilisation, availability and pricing for each venue will appear here.</p>
+      </div>
+    </div>
+
+    <div class="dash-view" id="view-clients">
+      <div class="panel view-placeholder">
+        <div class="icon-circle"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87m5-4a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></svg></div>
+        <h2>Clients</h2>
+        <p>96% rebooking rate. Full client profiles, event history and contacts live here.</p>
+      </div>
+    </div>
+
+    <div class="dash-view" id="view-reports">
+      <div class="panel view-placeholder">
+        <div class="icon-circle"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3v18h18M7 15l4-5 3 3 5-7"/></svg></div>
+        <h2>Reports</h2>
+        <p>Revenue, booking and venue-utilisation reports, exportable by month or quarter, will show up here.</p>
+      </div>
+    </div>
+
+    <div class="dash-view" id="view-settings">
+      <div class="panel view-placeholder">
+        <div class="icon-circle"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H9a1.7 1.7 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V9a1.7 1.7 0 0 0 1.6 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.6 1z"/></svg></div>
+        <h2>Settings</h2>
+        <p>Studio preferences, team access and notification settings live here.</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+const StacklyAuth = (() => {
+
+  const KEY = 'stackly_events_session';
+
+  // Login happens on login.html only — this page just reads the session it wrote.
+
+  function getSession(){
+    try { return JSON.parse(localStorage.getItem(KEY)); } catch(e){ return null; }
+  }
+
+  function logout(){
+    localStorage.removeItem(KEY);
+    window.location.href = 'login.html';
+  }
+
+  function guard(requiredRole){
+    const session = getSession();
+    if (!session) { window.location.href = 'login.html'; return null; }
+    if (requiredRole && session.role !== requiredRole) {
+      window.location.href = session.role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
+      return null;
+    }
+    return session;
+  }
+
+  function paintUser(session){
+    document.querySelectorAll('[data-user-name]').forEach(el => el.textContent = session.name);
+    document.querySelectorAll('[data-user-email]').forEach(el => el.textContent = (session.email || '').trim());
+    document.querySelectorAll('[data-user-initial]').forEach(el => el.textContent = session.name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase());
+  }
+
+  return { getSession, logout, guard, paintUser };
+})();
+</script>
+<script>
+  const session = StacklyAuth.guard('admin');
+  if (session) StacklyAuth.paintUser(session);
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  if (window.gsap) {
+    gsap.registerPlugin(ScrollTrigger);
+  }
+
+  /* ---------------------------------------------------------------------
+     1. TEXT SPLIT (manual SplitText-style word/char wrap, GSAP free-tier)
+     -------------------------------------------------------------------- */
+  function splitChars(el){
+    const text = el.textContent;
+    el.textContent = '';
+    const words = text.split(' ');
+    words.forEach((word, wi) => {
+      const wordSpan = document.createElement('span');
+      wordSpan.className = 'word';
+      [...word].forEach(ch => {
+        const charSpan = document.createElement('span');
+        charSpan.className = 'char';
+        charSpan.textContent = ch;
+        wordSpan.appendChild(charSpan);
+      });
+      el.appendChild(wordSpan);
+      if (wi < words.length - 1) el.appendChild(document.createTextNode('\u00A0'));
+    });
+    return el.querySelectorAll('.char');
+  }
+
+  const heroHeading = document.querySelector('[data-split-hero]');
+  let heroChars = [];
+  if (heroHeading) heroChars = splitChars(heroHeading);
+
+  /* ---------------------------------------------------------------------
+     2. LOAD-IN TIMELINE (hero)
+     -------------------------------------------------------------------- */
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+
+  if (heroChars.length) {
+    gsap.set(heroChars, { yPercent: 130, rotate: 6 });
+    tl.to(heroChars, { yPercent: 0, rotate: 0, duration: 1.1, stagger: 0.018 }, 0.15);
+  }
+  tl.from('[data-fade-up]', { y: 26, opacity: 0, duration: 0.9, stagger: 0.12 }, 0.55)
+    .from('.nav-inner', { y: -20, opacity: 0, duration: 0.7 }, 0)
+    .from('.ticker', { opacity: 0, duration: 1 }, 0.9);
+
+  /* ---------------------------------------------------------------------
+     3. AMBIENT BLOB / BACKGROUND MOTION (webflow-style floating gradients)
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('.stage-field').forEach(field => {
+    const blobs = field.querySelectorAll('.blob');
+    blobs.forEach((blob, i) => {
+      gsap.to(blob, {
+        x: () => gsap.utils.random(-120, 120),
+        y: () => gsap.utils.random(-90, 90),
+        duration: () => gsap.utils.random(9, 15),
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: i * 0.6
+      });
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     4. SPOTLIGHT CURSOR
+     -------------------------------------------------------------------- */
+  const cursor = document.querySelector('.spotlight-cursor');
+  if (cursor && window.matchMedia('(hover: hover)').matches) {
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let cx = mx, cy = my;
+    window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    gsap.ticker.add(() => {
+      cx += (mx - cx) * 0.12;
+      cy += (my - cy) * 0.12;
+      cursor.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`;
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     5. SCROLL REVEALS
+     -------------------------------------------------------------------- */
+  gsap.utils.toArray('.reveal-up').forEach((el, i) => {
+    gsap.to(el, {
+      opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%' },
+      delay: (i % 3) * 0.08
+    });
+  });
+
+  gsap.utils.toArray('.fade-in').forEach(el => {
+    gsap.to(el, {
+      opacity: 1, duration: 1.1, ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 90%' }
+    });
+  });
+
+  // Section eyebrow + heading combo reveal
+  gsap.utils.toArray('.section-head').forEach(head => {
+    gsap.from(head.children, {
+      y: 24, opacity: 0, duration: 0.8, stagger: 0.12, ease: 'power3.out',
+      scrollTrigger: { trigger: head, start: 'top 88%' }
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     6. IMAGE REVEAL (clip veil wipe)
+     -------------------------------------------------------------------- */
+  gsap.utils.toArray('.reveal-frame').forEach(frame => {
+    const veil = frame.querySelector('.reveal-veil');
+    const img = frame.querySelector('img');
+    if (!veil) return;
+    const t = gsap.timeline({ scrollTrigger: { trigger: frame, start: 'top 85%' } });
+    t.set(img, { scale: 1.25 })
+     .to(veil, { scaleY: 0, duration: 0.9, ease: 'power4.inOut' })
+     .to(img, { scale: 1, duration: 1.3, ease: 'power3.out' }, '-=0.6');
+  });
+
+  /* ---------------------------------------------------------------------
+     7. COUNTERS
+     -------------------------------------------------------------------- */
+  gsap.utils.toArray('[data-count]').forEach(el => {
+    const end = parseFloat(el.dataset.count);
+    const decimals = (el.dataset.count.split('.')[1] || '').length;
+    const counter = { val: 0 };
+    ScrollTrigger.create({
+      trigger: el, start: 'top 90%', once: true,
+      onEnter: () => {
+        gsap.to(counter, {
+          val: end, duration: 1.8, ease: 'power2.out',
+          onUpdate: () => { el.textContent = counter.val.toFixed(decimals); }
+        });
+      }
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     8. HOVER TILT ON CARDS (subtle 3D)
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('[data-tilt]').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      gsap.to(card, { rotateX: py * -6, rotateY: px * 6, duration: 0.5, ease: 'power2.out', transformPerspective: 800 });
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, { rotateX: 0, rotateY: 0, duration: 0.6, ease: 'power3.out' });
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     9. NAV: scroll state + active link + mobile off-canvas
+     -------------------------------------------------------------------- */
+  const nav = document.querySelector('.site-nav');
+  if (nav) {
+    ScrollTrigger.create({
+      start: 'top -60',
+      onUpdate: self => nav.classList.toggle('is-scrolled', self.scroll() > 60)
+    });
+  }
+
+  const toggle = document.querySelector('.nav-toggle');
+  const mobileMenu = document.querySelector('.mobile-menu');
+  if (toggle && mobileMenu) {
+    const menuLinks = mobileMenu.querySelectorAll('a, .btn');
+    let open = false;
+    const mtl = gsap.timeline({ paused: true })
+      .to(mobileMenu, { y: 0, duration: 0.55, ease: 'power4.inOut' })
+      .set(mobileMenu, { pointerEvents: 'auto' }, 0)
+      .to(menuLinks, { opacity: 1, y: 0, duration: 0.5, stagger: 0.06 }, 0.2);
+    gsap.set(mobileMenu, { yPercent: 0, y: '-100%' });
+    gsap.set(menuLinks, { y: 20 });
+
+    toggle.addEventListener('click', () => {
+      open = !open;
+      toggle.classList.toggle('is-open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+      if (open) { mtl.play(); } else { mtl.reverse(); }
+    });
+    menuLinks.forEach(l => l.addEventListener('click', () => {
+      open = false; toggle.classList.remove('is-open'); document.body.style.overflow = '';
+      mtl.reverse();
+    }));
+  }
+
+  /* ---------------------------------------------------------------------
+     10. TICKER (marquee) — auto scroll, duplicated for seamless loop
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('.ticker-track').forEach(track => {
+    track.innerHTML += track.innerHTML;
+    const distance = track.scrollWidth / 2;
+    gsap.to(track, {
+      x: -distance, duration: parseFloat(track.dataset.speed || 28), ease: 'none', repeat: -1
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     10b. TOPBAR SEARCH → NAVIGATE ON SEARCH
+     -------------------------------------------------------------------- */
+  const dashSearchInput = document.getElementById('dashSearchInput');
+  if (dashSearchInput) {
+    dashSearchInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && dashSearchInput.value.trim().length) {
+        window.location.href = 'error.html';
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     11. DASHBOARD SIDEBAR (mobile)
+     -------------------------------------------------------------------- */
+  const sidebarToggle = document.querySelector('.mobile-menu-btn');
+  const sidebarCloseBtn = document.querySelector('.sidebar-close');
+  const sidebar = document.querySelector('.dash-sidebar');
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', () => sidebar.classList.toggle('is-open'));
+    document.addEventListener('click', e => {
+      if (sidebar.classList.contains('is-open') && !sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+        sidebar.classList.remove('is-open');
+      }
+    });
+  }
+  if (sidebarCloseBtn && sidebar) {
+    sidebarCloseBtn.addEventListener('click', () => sidebar.classList.remove('is-open'));
+  }
+
+  /* ---------------------------------------------------------------------
+     11b. SIDEBAR NAV → SHOW RELEVANT CONTENT
+     -------------------------------------------------------------------- */
+  const sectionLinks = document.querySelectorAll('.dash-nav a[data-section]');
+  const dashViews = document.querySelectorAll('.dash-view');
+  if (sectionLinks.length && dashViews.length) {
+    sectionLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = link.dataset.section;
+
+        sectionLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+
+        dashViews.forEach(v => v.classList.remove('is-active'));
+        const view = document.getElementById('view-' + target);
+        if (view) {
+          view.classList.add('is-active');
+          gsap.fromTo(view, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: .45, ease: 'power2.out' });
+        }
+
+        if (sidebar && sidebar.classList.contains('is-open')) sidebar.classList.remove('is-open');
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     12. FAQ ACCORDION (used on services page)
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const q = item.querySelector('.faq-q');
+    const a = item.querySelector('.faq-a');
+    if (!q || !a) return;
+    gsap.set(a, { height: 0, overflow: 'hidden' });
+    q.addEventListener('click', () => {
+      const isOpen = item.classList.toggle('is-open');
+      gsap.to(a, { height: isOpen ? 'auto' : 0, duration: 0.5, ease: 'power3.inOut' });
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     13. FILTER PILLS (blog / services)
+     -------------------------------------------------------------------- */
+  document.querySelectorAll('.filter-row').forEach(row => {
+    const pills = row.querySelectorAll('.filter-pill');
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        pills.forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        const target = pill.dataset.filter;
+        const grid = document.querySelector(row.dataset.target);
+        if (!grid) return;
+        grid.querySelectorAll('[data-category]').forEach(item => {
+          const show = target === 'all' || item.dataset.category === target;
+          gsap.to(item, { opacity: show ? 1 : 0, scale: show ? 1 : 0.92, duration: 0.35, ease: 'power2.out',
+            onStart: () => { if (show) item.style.display = ''; },
+            onComplete: () => { if (!show) item.style.display = 'none'; } });
+        });
+      });
+    });
+  });
+
+  /* ---------------------------------------------------------------------
+     14. SMOOTH ANCHOR + ACTIVE NAV BY URL
+     -------------------------------------------------------------------- */
+  const path = location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links a, .mobile-menu a, .dash-nav a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (href === path) a.classList.add('active');
+  });
+
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (!window.Chart) return;
+
+  Chart.defaults.font.family = "'Manrope', sans-serif";
+  Chart.defaults.color = '#9aa1c7';
+
+  const gridColor = 'rgba(38,45,84,0.6)';
+  const amber = '#ffb443';
+  const violet = '#8b7fff';
+  const emerald = '#4ade9c';
+
+  function fadeGradient(ctx, color){
+    const g = ctx.createLinearGradient(0, 0, 0, 260);
+    g.addColorStop(0, color + '55');
+    g.addColorStop(1, color + '00');
+    return g;
+  }
+
+  /* ---- Admin: bookings revenue trend ---- */
+  const revenueEl = document.getElementById('revenueChart');
+  if (revenueEl) {
+    const ctx = revenueEl.getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Feb','Mar','Apr','May','Jun','Jul','Aug'],
+        datasets: [
+          {
+            label: 'Revenue (\u20B9L)',
+            data: [18, 22, 19, 27, 31, 29, 38],
+            borderColor: amber, backgroundColor: fadeGradient(ctx, '#ffb443'),
+            fill: true, tension: 0.42, pointRadius: 0, borderWidth: 3
+          },
+          {
+            label: 'Bookings',
+            data: [9, 12, 10, 15, 17, 16, 21],
+            borderColor: violet, backgroundColor: 'transparent',
+            fill: false, tension: 0.42, pointRadius: 0, borderWidth: 2, borderDash: [5,5]
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 10, usePointStyle: true } } },
+        scales: {
+          x: { grid: { display: false }, border: { display: false } },
+          y: { grid: { color: gridColor }, border: { display: false } }
+        }
+      }
+    });
+  }
+
+  /* ---- Admin: event type distribution ---- */
+  const eventTypeEl = document.getElementById('eventTypeChart');
+  if (eventTypeEl) {
+    new Chart(eventTypeEl.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Conferences', 'Product launches', 'Galas & awards', 'Team offsites', 'Workshops'],
+        datasets: [{
+          data: [34, 21, 18, 16, 11],
+          backgroundColor: [amber, violet, emerald, '#5b6bd6', '#3a4270'],
+          borderColor: '#12162c', borderWidth: 4
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '68%',
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 9, usePointStyle: true, padding: 16, font: { size: 11 } } } }
+      }
+    });
+  }
+
+  /* ---- Admin: venue utilisation bar ---- */
+  const venueEl = document.getElementById('venueChart');
+  if (venueEl) {
+    new Chart(venueEl.getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Grand Atrium', 'The Amphitheatre', 'Skyline Hall', 'Garden Pavilion', 'Executive Suite'],
+        datasets: [{ data: [88, 74, 65, 52, 40], backgroundColor: amber, borderRadius: 8, maxBarThickness: 22 }]
+      },
+      options: {
+        indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { color: gridColor }, border: { display: false }, max: 100 },
+          y: { grid: { display: false }, border: { display: false } }
+        }
+      }
+    });
+  }
+
+  /* ---- User dashboard: budget breakdown ---- */
+  const budgetEl = document.getElementById('budgetChart');
+  if (budgetEl) {
+    new Chart(budgetEl.getContext('2d'), {
+      type: 'doughnut',
+      data: {
+        labels: ['Venue', 'Catering', 'AV & production', 'Décor', 'Staffing'],
+        datasets: [{
+          data: [42, 24, 16, 10, 8],
+          backgroundColor: [amber, violet, emerald, '#5b6bd6', '#3a4270'],
+          borderColor: '#12162c', borderWidth: 4
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false, cutout: '70%',
+        plugins: { legend: { position: 'bottom', labels: { boxWidth: 9, usePointStyle: true, padding: 14, font: { size: 11 } } } }
+      }
+    });
+  }
+
+  /* ---- User dashboard: RSVP tracker ---- */
+  const rsvpEl = document.getElementById('rsvpChart');
+  if (rsvpEl) {
+    const ctx = rsvpEl.getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Wk 1','Wk 2','Wk 3','Wk 4','Wk 5','Wk 6'],
+        datasets: [{
+          label: 'Confirmed guests', data: [40, 96, 150, 210, 265, 312],
+          borderColor: emerald, backgroundColor: fadeGradient(ctx, '#4ade9c'),
+          fill: true, tension: 0.4, pointRadius: 0, borderWidth: 3
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false }, border: { display: false } },
+          y: { grid: { color: gridColor }, border: { display: false } }
+        }
+      }
+    });
+  }
+
+});
+</script>
+</body>
+</html>

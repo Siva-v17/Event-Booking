@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Booking not found | Stackly Events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void:        #080a17;
+    --void-soft:    #0c0f22;
+    --panel:        #12162c;
+    --panel-light:  #1b2144;
+    --panel-border: #262d54;
+    --spotlight:    #ffb443;
+    --spotlight-dim:#a87a2e;
+    --violet:       #8b7fff;
+    --violet-dim:   #4f47a3;
+    --porcelain:    #f6f3ec;
+    --mist:         #9aa1c7;
+    --mist-dim:     #666d94;
+    --emerald:      #4ade9c;
+    --coral:        #ff6b6b;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html,body{
+    height:100%;
+    background:var(--void);
+    color:var(--porcelain);
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+  }
+
+  body{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    background:
+      radial-gradient(ellipse 60% 45% at 50% 0%, rgba(139,127,255,0.10), transparent 60%),
+      linear-gradient(180deg, var(--void) 0%, var(--void-soft) 55%, var(--void) 100%);
+  }
+
+  /* ---------- stage floor : seat grid ---------- */
+  .stage{
+    position:absolute;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    perspective:900px;
+  }
+
+  .seat-grid{
+    position:absolute;
+    left:50%;
+    bottom:-6%;
+    width:220%;
+    height:60%;
+    transform:translateX(-50%) rotateX(58deg);
+    transform-origin:center bottom;
+    background-image:
+      radial-gradient(circle, rgba(154,161,199,0.35) 1.4px, transparent 1.6px);
+    background-size:34px 34px;
+    mask-image:linear-gradient(to top, black 0%, black 55%, transparent 100%);
+    -webkit-mask-image:linear-gradient(to top, black 0%, black 55%, transparent 100%);
+  }
+
+  .beam-wash{
+    position:absolute;
+    left:50%;
+    bottom:-6%;
+    width:220%;
+    height:60%;
+    transform:translateX(-50%) rotateX(58deg);
+    transform-origin:center bottom;
+    background-image:radial-gradient(circle, rgba(255,180,67,0.9) 1.6px, transparent 1.8px);
+    background-size:34px 34px;
+    mask-image:linear-gradient(to top, black 0%, black 55%, transparent 100%);
+    -webkit-mask-image:linear-gradient(to top, black 0%, black 55%, transparent 100%);
+    -webkit-mask-composite:source-in;
+    opacity:0;
+    mix-blend-mode:screen;
+  }
+
+  /* ---------- spotlight cone ---------- */
+  .rig{
+    position:absolute;
+    top:-4%;
+    left:50%;
+    width:2px;
+    height:2px;
+  }
+
+  .beam{
+    position:absolute;
+    top:0;
+    left:0;
+    width:640px;
+    height:900px;
+    transform-origin:0px 0px;
+    clip-path:polygon(0 0, 100% 0, 74% 100%, 26% 100%);
+    background:conic-gradient(from 90deg at 0% 0%, transparent, rgba(255,180,67,0.16) 8%, rgba(255,180,67,0.05) 20%, transparent 34%);
+    filter:blur(1px);
+    pointer-events:none;
+  }
+
+  .fixture{
+    position:absolute;
+    top:-14px;
+    left:-16px;
+    width:32px;
+    height:20px;
+    background:linear-gradient(180deg, #2a2f57, #171b39);
+    border:1px solid var(--panel-border);
+    border-radius:4px 4px 8px 8px;
+    box-shadow:0 0 18px rgba(255,180,67,0.5);
+  }
+
+  /* ---------- floating dust ---------- */
+  .dust{
+    position:absolute;
+    border-radius:50%;
+    background:var(--spotlight);
+    opacity:0;
+    pointer-events:none;
+  }
+
+  /* ---------- content ---------- */
+  .content{
+    position:relative;
+    z-index:2;
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:7vh 24px 8vh;
+  }
+
+  .eyebrow{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--mist);
+    opacity:0;
+  }
+
+  .eyebrow .dot{
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:var(--spotlight);
+    box-shadow:0 0 8px var(--spotlight);
+  }
+
+  .digits{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    margin-top:26px;
+    opacity:0;
+  }
+
+  .digit{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:clamp(88px, 18vw, 176px);
+    line-height:1;
+    color:var(--porcelain);
+    text-shadow:0 0 40px rgba(255,180,67,0.25);
+  }
+
+  .lens{
+    position:relative;
+    width:clamp(70px, 14vw, 138px);
+    height:clamp(70px, 14vw, 138px);
+    border-radius:50%;
+    background:radial-gradient(circle at 42% 38%, #ffe3ad 0%, var(--spotlight) 38%, var(--spotlight-dim) 68%, #5c3f16 100%);
+    box-shadow:
+      0 0 0 4px var(--panel-border),
+      0 0 0 8px var(--void-soft),
+      0 0 55px rgba(255,180,67,0.55);
+  }
+
+  .lens::after{
+    content:"";
+    position:absolute;
+    inset:22%;
+    border-radius:50%;
+    background:radial-gradient(circle at 40% 35%, rgba(255,255,255,0.85), rgba(255,255,255,0) 60%);
+  }
+
+  h1.sr-title{
+    position:absolute;
+    width:1px;height:1px;
+    overflow:hidden;
+    clip:rect(0,0,0,0);
+  }
+
+  .headline{
+    margin-top:30px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:clamp(20px, 2.6vw, 28px);
+    color:var(--porcelain);
+    opacity:0;
+  }
+
+  .subline{
+    margin-top:14px;
+    max-width:480px;
+    font-size:15px;
+    line-height:1.6;
+    color:var(--mist);
+    opacity:0;
+  }
+
+  .ticket{
+    margin-top:34px;
+    display:inline-flex;
+    align-items:center;
+    gap:14px;
+    padding:10px 20px;
+    border:1px dashed var(--panel-border);
+    border-radius:999px;
+    background:var(--panel);
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.05em;
+    color:var(--mist);
+    opacity:0;
+  }
+
+  .ticket .ref{ color:var(--porcelain); }
+  .ticket .sep{ color:var(--panel-border); }
+  .ticket .status{
+    color:var(--coral);
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+  }
+  .ticket .status::before{
+    content:"";
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--coral);
+    box-shadow:0 0 8px var(--coral);
+  }
+
+  .actions{
+    margin-top:42px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    justify-content:center;
+    opacity:0;
+  }
+
+  .btn{
+    appearance:none;
+    border:none;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:14.5px;
+    letter-spacing:0.01em;
+    padding:14px 28px;
+    border-radius:10px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    transition:transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  }
+
+  .btn svg{ width:17px; height:17px; flex-shrink:0; }
+
+  .btn-primary{
+    background:linear-gradient(180deg, #ffc470, var(--spotlight));
+    color:#241703;
+    box-shadow:0 10px 30px rgba(255,180,67,0.25);
+  }
+  .btn-primary:hover{
+    transform:translateY(-2px);
+    box-shadow:0 14px 36px rgba(255,180,67,0.38);
+  }
+
+  .btn-ghost{
+    background:var(--panel);
+    color:var(--porcelain);
+    border:1px solid var(--panel-border);
+  }
+  .btn-ghost:hover{
+    transform:translateY(-2px);
+    border-color:var(--violet-dim);
+    background:var(--panel-light);
+    box-shadow:0 14px 30px rgba(139,127,255,0.14);
+  }
+
+  .btn:active{ transform:translateY(0) scale(0.98); }
+
+  .btn:focus-visible{
+    outline:2px solid var(--violet);
+    outline-offset:3px;
+  }
+
+  footer{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding:22px 16px 26px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--mist-dim);
+    opacity:0;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .beam{ animation:none !important; }
+    .dust{ display:none; }
+  }
+
+  @media (max-width:520px){
+    .digit{ font-size:56px; }
+    .lens{ width:64px; height:64px; }
+    .ticket{ font-size:10.5px; padding:9px 14px; flex-wrap:wrap; justify-content:center; }
+    .actions{ flex-direction:column; width:100%; max-width:300px; }
+    .btn{ justify-content:center; }
+  }
+</style>
+</head>
+<body>
+
+<h1 class="sr-title">404 — This corporate event booking could not be found</h1>
+
+<div class="stage" aria-hidden="true">
+  <div class="seat-grid"></div>
+  <div class="beam-wash" id="beamWash"></div>
+  <div class="rig" id="rig">
+    <div class="fixture"></div>
+    <div class="beam" id="beam"></div>
+  </div>
+</div>
+
+<main class="content">
+  <p class="eyebrow" id="eyebrow"><span class="dot"></span>Stackly Events · Booking lookup</p>
+
+  <div class="digits" id="digits">
+    <span class="digit">4</span>
+    <span class="lens" role="img" aria-label="spotlight lens"></span>
+    <span class="digit">4</span>
+  </div>
+
+  <p class="headline" id="headline">The venue's empty. No event booked here.</p>
+  <p class="subline" id="subline">
+    We swept the whole floor and this booking isn't on the calendar — wrong link,
+    or the event may have been moved or cancelled. Let's get you back on schedule.
+  </p>
+
+  <div class="ticket" id="ticket">
+    <span class="ref">REF · EVT-0000-404</span>
+    <span class="sep">/</span>
+    <span class="status">NOT FOUND</span>
+  </div>
+
+  <div class="actions" id="actions">
+    <button class="btn btn-ghost" id="backBtn" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      Go back
+    </button>
+    <a class="btn btn-primary" id="homeBtn" href="/">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>
+      Return home
+    </a>
+  </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+  document.getElementById('backBtn').addEventListener('click', function(){
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      window.location.href = '/';
+    }
+  });
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (typeof gsap !== 'undefined' && !reduceMotion) {
+
+    var rig = document.getElementById('rig');
+    var beamWash = document.getElementById('beamWash');
+
+    function positionRig(){
+      rig.style.left = '50%';
+    }
+    positionRig();
+
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    tl.to('#eyebrow', { opacity: 1, y: 0, duration: 0.6 }, 0.1)
+      .fromTo('#digits', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.8 }, 0.25)
+      .fromTo('#headline', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.6 }, 0.55)
+      .fromTo('#subline', { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.6 }, 0.68)
+      .fromTo('#ticket', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 }, 0.82)
+      .fromTo('#actions', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.5 }, 0.95)
+      .fromTo('#pageFooter', { opacity: 0 }, { opacity: 1, duration: 0.6 }, 1.1);
+
+    gsap.timeline({ repeat: -1, yoyo: true, delay: 0.4 })
+      .to('#rig', { rotation: -34, duration: 3.4, ease: 'sine.inOut' }, 0)
+      .to('#rig', { rotation: 34, duration: 3.4, ease: 'sine.inOut' }, 3.4)
+      .to(beamWash, { opacity: 0.9, duration: 1.6, ease: 'sine.inOut' }, 0)
+      .to(beamWash, { opacity: 0.3, duration: 1.6, ease: 'sine.inOut' }, 1.6)
+      .to(beamWash, { opacity: 0.9, duration: 1.6, ease: 'sine.inOut' }, 3.2);
+
+    var stage = document.querySelector('.stage');
+    var dustCount = window.innerWidth < 600 ? 8 : 16;
+    for (var i = 0; i < dustCount; i++) {
+      var d = document.createElement('div');
+      d.className = 'dust';
+      var size = gsap.utils.random(2, 4);
+      d.style.width = size + 'px';
+      d.style.height = size + 'px';
+      d.style.left = gsap.utils.random(20, 80) + '%';
+      d.style.top = gsap.utils.random(10, 55) + '%';
+      stage.appendChild(d);
+
+      gsap.to(d, {
+        opacity: gsap.utils.random(0.15, 0.45),
+        y: '+=' + gsap.utils.random(-40, -90),
+        x: '+=' + gsap.utils.random(-20, 20),
+        duration: gsap.utils.random(4, 8),
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        delay: gsap.utils.random(0, 3)
+      });
+    }
+  } else {
+    var ids = ['eyebrow','digits','headline','subline','ticket','actions','pageFooter'];
+    ids.forEach(function(id){ document.getElementById(id).style.opacity = 1; });
+  }
+</script>
+</body>
+</html>
