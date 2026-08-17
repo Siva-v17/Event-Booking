@@ -302,6 +302,18 @@ p{ margin:0; }
 .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
 .check-row{ display:flex; align-items:center; gap:10px; font-size:.86rem; color:var(--mist); }
 
+/* ---- Date input: restyle the native calendar picker icon so it matches
+   the dark UI instead of the browser's default black glyph ---- */
+.field input[type="date"]{ color-scheme:dark; position:relative; }
+.field input[type="date"]::-webkit-calendar-picker-indicator{
+  filter:invert(66%) sepia(56%) saturate(886%) hue-rotate(342deg) brightness(101%) contrast(101%);
+  opacity:.85; cursor:pointer; padding:2px; border-radius:4px; transition:opacity .25s, background .25s;
+}
+.field input[type="date"]::-webkit-calendar-picker-indicator:hover{
+  opacity:1; background:var(--panel-light);
+}
+.field input[type="date"]:focus::-webkit-calendar-picker-indicator{ opacity:1; }
+
 /* ---- Custom select (replaces native <select> popup, stays inside layout) ---- */
 .custom-select{ position:relative; }
 .custom-select-native{
