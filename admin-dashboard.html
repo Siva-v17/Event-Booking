@@ -10,17 +10,11 @@
    DASHBOARD OVERRIDES — sidebar spacing, card hover, mobile close icon,
    in-page nav content switching, and responsive fixes.
    ========================================================================== */
-.dash-sidebar{
-  width:250px; padding:22px 16px;
-}
-.dash-sidebar .logo{ margin-bottom:0; padding-left:6px; display:block; height:46px; overflow:hidden; }
+.dash-sidebar .logo{ margin-bottom:0; padding-left:6px; display:inline-block; }
 .dash-sidebar .logo img{ height:70px; display:block; }
-.dash-sidebar .dash-user-mini{ margin-top:0; }
 .dash-nav{ gap:2px; }
 .dash-nav a{ padding:10px 12px; gap:12px; font-size:.9rem; }
 .dash-nav .divider{ padding:14px 12px 6px; }
-.dash-user-mini{ padding:10px; margin-top:6px; gap:10px; }
-.dash-user-mini .avatar{ width:34px; height:34px; font-size:.76rem; }
 .dash-user-mini strong{ font-size:.84rem; }
 .dash-user-mini span{ font-size:.72rem; }
 
@@ -440,10 +434,9 @@ p{ margin:0; }
 .dash{ display:flex; min-height:100vh; }
 .dash-sidebar{
   width:270px; flex-shrink:0; background:var(--void-soft); border-right:1px solid var(--panel-border);
-  padding:30px 22px; position:fixed; top:0; left:0; bottom:0; z-index:900; display:flex; flex-direction:column;
+  padding:20px 16px; position:fixed; top:0; left:0; bottom:0; z-index:900; display:flex; flex-direction:column;
   transition:transform .45s var(--ease-stage);
 }
-.dash-sidebar .logo{ margin-bottom:44px; padding-left:10px; }
 .dash-nav{ display:flex; flex-direction:column; gap:4px; flex:1; }
 .dash-nav a{
   display:flex; align-items:center; gap:14px; padding:13px 14px; border-radius:var(--radius-sm);
@@ -453,8 +446,8 @@ p{ margin:0; }
 .dash-nav a:hover{ background:var(--panel); color:var(--porcelain); }
 .dash-nav a.active{ background:var(--panel-light); color:var(--spotlight); border-left:2px solid var(--spotlight); }
 .dash-nav .divider{ font-family:var(--font-mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mist-dim); padding:20px 14px 8px; }
-.dash-user-mini{ display:flex; align-items:center; gap:12px; padding:14px; border-top:1px solid var(--panel-border); margin-top:10px; }
-.dash-user-mini .avatar{ width:38px; height:38px; border-radius:50%; background:var(--panel-light); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); color:var(--spotlight); font-size:.8rem; }
+.dash-user-mini{ display:flex; align-items:center; gap:10px; padding:12px 4px; border-top:1px solid var(--panel-border); margin-top:0; }
+.dash-user-mini .avatar{ width:34px; height:34px; border-radius:50%; background:var(--panel-light); display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); color:var(--spotlight); font-size:.76rem; }
 .dash-user-mini strong{ display:block; font-size:.86rem; }
 .dash-user-mini span{ font-size:.74rem; color:var(--mist-dim); }
 .sidebar-toggle{ display:none; }
