@@ -789,7 +789,22 @@ const StacklyAuth = (() => {
       return;
     }
     errorBox.classList.remove('is-visible');
-    window.location.href = result.session.role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
+
+    // Show a clear success confirmation before moving to the dashboard.
+    const destination = result.session.role === 'admin' ? 'admin-dashboard.html' : 'user-dashboard.html';
+    let redirected = false;
+    const goToDashboard = () => {
+      if (redirected) return;
+      redirected = true;
+      window.location.href = destination;
+    };
+    showStatusModal({
+      icon: 'check',
+      title: 'Login successful',
+      message: `Welcome back, ${result.session.name}. Taking you to your dashboard...`,
+      onDone: goToDashboard
+    });
+    setTimeout(goToDashboard, 1800);
   });
 
   // Role toggle: selects Member/Admin only — does NOT pre-fill, submit, or navigate.
